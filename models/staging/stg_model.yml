@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: stg_customer
+    description: Pulled from sonflake TPCH_SF1000 database 
     columns:
       - name: customer_key
+        description: PK of customer table
         tests:
           - unique
           - not_null
@@ -15,7 +17,7 @@ models:
       - name: market_segment
       - name: comment
 
-  - name: stg_lineitems
+  - name: stg_lineitem
     columns:
       - name: order_key
       - name: part_key
@@ -26,6 +28,7 @@ models:
       - name: discount_percentage
       - name: tax_rate
       - name: return_flag
+        description: "{{doc('return_flag')}}"
       - name: status_code
       - name: ship_date
       - name: commit_date
@@ -34,7 +37,7 @@ models:
       - name: ship_mode
       - name: comment
 
-  - name: stg_nations
+  - name: stg_nation
     columns:
       - name: nation_key
         tests:
@@ -46,8 +49,10 @@ models:
              
  
   - name: stg_orders
+    description: Pulled from TPCH_SF1000 database
     columns:
       - name: order_key
+        description: PK of orders table
         tests:
           - unique
           - not_null
@@ -56,19 +61,22 @@ models:
       - name: total_price
       - name: order_date
       - name: priority_code
-      - name: clerk_name
+        description: "{{doc('orders_priority')}}"
+      - name: clerk_id
       - name: ship_priority
       - name: comment
 
   
-  - name: stg_regions
+  - name: stg_region
     columns:
       - name: region_key
+        description: PK of region table.
         tests:
           - unique
           - not_null
       - name: region_name
+        description: "{{doc('region_status')}}"
         tests:
           - accepted_values:
-              values: ['AFRICA','MIDDLE EAST','ASIA','AMERICA', 'EUROPE']          
+              values: ['AFRICA','MIDDLE EAST','ASIA','AMERICA', 'EUROPE']                    
       - name: comment
