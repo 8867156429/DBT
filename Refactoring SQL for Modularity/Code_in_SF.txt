@@ -1,0 +1,70 @@
+use warehouse SK_WH;
+
+create database sk_raw;
+create schema sk_raw.jaffle_shop;
+create schema sk_raw.stripe;
+
+create database sk_analytics;   
+create schema sk_analytics.dbt;
+
+
+create schema dbt;
+
+
+-- customer Table
+create table sk_raw.jaffle_shop.customers 
+( id integer,
+  first_name varchar,
+  last_name varchar
+);
+
+copy into sk_raw.jaffle_shop.customers (id, first_name, last_name)
+from 's3://dbt-tutorial-public/jaffle_shop_customers.csv'
+file_format = (
+  type = 'CSV'
+  field_delimiter = ','
+  skip_header = 1
+  );
+  
+-- orders Table
+create table sk_raw.jaffle_shop.orders
+( id integer,
+  user_id integer,
+  order_date date,
+  status varchar,
+  _etl_loaded_at timestamp default current_timestamp
+);
+
+copy into sk_raw.jaffle_shop.orders (id, user_id, order_date, status)
+from 's3://dbt-tutorial-public/jaffle_shop_orders.csv'
+file_format = (
+  type = 'CSV'
+  field_delimiter = ','
+  skip_header = 1
+  );
+  
+  
+  -- Payments Table
+  create table sk_raw.stripe.payment 
+( id integer,
+  orderid integer,
+  paymentmethod varchar,
+  status varchar,
+  amount integer,
+  created date,
+  _batched_at timestamp default current_timestamp
+);
+
+copy into sk_raw.stripe.payment (id, orderid, paymentmethod, status, amount, created)
+from 's3://dbt-tutorial-public/stripe_payments.csv'
+file_format = (
+  type = 'CSV'
+  field_delimiter = ','
+  skip_header = 1
+  );
+  
+-- verify
+select * from sk_raw.jaffle_shop.customers;
+select * from sk_raw.jaffle_shop.orders;
+select * from sk_raw.stripe.payment;
+
